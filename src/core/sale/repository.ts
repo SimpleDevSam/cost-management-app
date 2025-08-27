@@ -3,6 +3,11 @@ import { SaleModel } from "./mongooseModel";
 import { Sale } from "./saleEntity";
 import { GetAllSalesDTO } from "@/app/api/sale/getAll/route";
 import { EditSaleDTO } from "./use-cases/editSale";
+import { CustomerModel } from "../customer/mongooseModel";
+
+
+// TODO:this line is preventing the "customer not defined" error, need to understand a better way to do this.
+const CustomerSchema = CustomerModel.schema;
 
 export class SaleRepository {
   async create(sale: Sale): Promise<Sale> {
