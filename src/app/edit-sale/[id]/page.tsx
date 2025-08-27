@@ -81,9 +81,9 @@ export default function EditSale({ params }: { params: Promise<{ id: string }>})
     defaultValues:{
       amount:1,
       customerName:'',
-      deliveredDate:'',
+      deliveredDate:null,
       soldAt: '',
-      pgDate:'',
+      pgDate:null,
       quantity:1
     }
   });
@@ -118,7 +118,7 @@ export default function EditSale({ params }: { params: Promise<{ id: string }>})
     });
 
 
-    router.push(`/view-sale/${resolvedParams.id}`);
+    // router.push(`/view-sale/${resolvedParams.id}`);
   }
 
   return (

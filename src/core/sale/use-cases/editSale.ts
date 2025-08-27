@@ -37,7 +37,10 @@ export class EditSale {
 
     const customer = await this.saleRepo.editSale(
       {
-        
+        _id:editSaleDTO._id,
+        amount:editSaleDTO.amount,
+        quantity:editSaleDTO.quantity,
+        soldAt:editSaleDTO.soldAt,
         customer:customerData,
         deliveredDate:editSaleDTO.deliveredDate,
         pgDate:editSaleDTO.pgDate,

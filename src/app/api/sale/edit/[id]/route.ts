@@ -9,24 +9,29 @@ const editCustomer = new EditSale( new SaleRepository(), new CustomerRepository(
 const schema = z.object({
     amount: z.number().min(0, "Valor deve ser maior que zero"),
     soldAt: z.preprocess((arg) => {
+      if (typeof arg ==="string" && arg === '') return undefined
       if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
     }, z.date({ error: "Data deve ser uma data válida" })),
     customerName: z.string({
       error: "Deve ser um nome válido",
     }),
     pgDate: z.preprocess((arg) => {
+      if (typeof arg === "string" && arg === '') return undefined;
       if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
-    }, z.date({ error: "Data deve ser uma data válida" })).optional().nullable(),
+      return arg;
+    }, z.union([z.date({ error: "Data deve ser uma data válida" }), z.undefined(), z.null()])),
     deliveredDate: z.preprocess((arg) => {
+      if (typeof arg === "string" && arg === '') return undefined;
       if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
-    }, z.date({ error: "Data deve ser uma data válida" })).optional().nullable(),
+      return arg;
+    }, z.union([z.date({ error: "Data deve ser uma data válida" }), z.undefined(), z.null()])),
     quantity: z.number().int().min(1, "Quantidade deve ser ao menos 1 grama"),
   });
 
 export async function PATCH(req: Request , { params }: { params: { id: string }}) {
   const body = await req.json();
   const id = (await params).id;
-  const { amount, soldAt, customer, pgDate, deliveredDate, quantity } = body;
+  const { amount, soldAt, customerName, pgDate, deliveredDate, quantity } = body;
 
   try {
     await schema.parseAsync(body); 
@@ -39,7 +44,7 @@ export async function PATCH(req: Request , { params }: { params: { id: string }}
     const editSaleDTO : EditSaleDTO = {
       _id:id,
       amount,
-      customer,
+      customerName,
       pgDate,
       deliveredDate,
       soldAt,
