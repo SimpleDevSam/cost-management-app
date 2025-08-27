@@ -1,5 +1,5 @@
 import { connectDatabase } from "@/infra/database";
-import { SaleDocument, SaleModel } from "./mongooseModel";
+import { SaleModel } from "./mongooseModel";
 import { Sale } from "./saleEntity";
 import { GetAllSalesDTO } from "@/app/api/sale/getAll/route";
 import { EditSaleDTO } from "./use-cases/editSale";
