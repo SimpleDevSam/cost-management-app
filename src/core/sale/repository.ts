@@ -38,10 +38,10 @@ export class SaleRepository {
     return doc;
   }
 
-  async markAsDeleted(sale: Sale): Promise<Sale> {
+  async markAsDeleted(saleId: string): Promise<Sale> {
     await connectDatabase();
 
-    let doc = await SaleModel.findOneAndUpdate<Sale>({_id:sale._id}, {isDeleted:true}).exec();
+    let doc = await SaleModel.findOneAndUpdate<Sale>({_id:saleId}, {isDeleted:true}).exec();
 
     if (!doc){
       throw new Error('Venda não encontrada pala ser deletada.')
@@ -59,7 +59,7 @@ export class SaleRepository {
 
   async getAll(): Promise<GetAllSalesDTO[]> {
       await connectDatabase();
-      return await SaleModel.find().populate('customer').exec();
+      return await SaleModel.find({isDeleted:false}).populate('customer').exec();
     }
 
 }
