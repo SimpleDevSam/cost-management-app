@@ -7,7 +7,6 @@ import { EditSale, EditSaleDTO } from "@/core/sale/use-cases/editSale";
 const editCustomer = new EditSale( new SaleRepository(), new CustomerRepository());
 
 const schema = z.object({
-    amount: z.number().min(0, "Valor deve ser maior que zero"),
     soldAt: z.preprocess((arg) => {
       if (typeof arg ==="string" && arg === '') return undefined
       if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
@@ -24,14 +23,13 @@ const schema = z.object({
       if (typeof arg === "string" && arg === '') return undefined;
       if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
       return arg;
-    }, z.union([z.date({ error: "Data deve ser uma data válida" }), z.undefined(), z.null()])),
-    quantity: z.number().int().min(1, "Quantidade deve ser ao menos 1 grama"),
+    }, z.union([z.date({ error: "Data deve ser uma data válida" }), z.undefined(), z.null()]))
   });
 
 export async function PATCH(req: Request , { params }: { params: { id: string }}) {
   const body = await req.json();
   const id = (await params).id;
-  const { amount, soldAt, customerName, pgDate, deliveredDate, quantity } = body;
+  const { soldAt, customerName, pgDate, deliveredDate} = body;
 
   try {
     await schema.parseAsync(body); 
@@ -43,12 +41,10 @@ export async function PATCH(req: Request , { params }: { params: { id: string }}
   try {
     const editSaleDTO : EditSaleDTO = {
       _id:id,
-      amount,
       customerName,
       pgDate,
       deliveredDate,
       soldAt,
-      quantity
     }
     const sale = await editCustomer.execute(editSaleDTO)
     return NextResponse.json(sale, { status: 201 });

@@ -6,8 +6,6 @@ export interface EditSaleDTO {
     readonly _id?: string;
     readonly customerName?: string;
     readonly customer?: Customer;
-    readonly amount?: number;
-    readonly quantity?: number;
     readonly soldAt?: Date;
     readonly pgDate?: Date | null;
     readonly deliveredDate?: Date | null;
@@ -38,8 +36,6 @@ export class EditSale {
     const customer = await this.saleRepo.editSale(
       {
         _id:editSaleDTO._id,
-        amount:editSaleDTO.amount,
-        quantity:editSaleDTO.quantity,
         soldAt:editSaleDTO.soldAt,
         customer:customerData,
         deliveredDate:editSaleDTO.deliveredDate,

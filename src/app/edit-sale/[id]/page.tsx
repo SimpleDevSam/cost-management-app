@@ -140,6 +140,7 @@ export default function EditSale({ params }: { params: Promise<{ id: string }>})
                       <Input
                         type="number"
                         step="0.01"
+                        disabled={true}
                         placeholder="0.00"
                         {...field}
                         onChange={(e) => field.onChange(parseFloat(e.target.value || '0'))}
@@ -233,6 +234,7 @@ export default function EditSale({ params }: { params: Promise<{ id: string }>})
                     <FormLabel>Quantidade (gramas)</FormLabel>
                     <FormControl>
                       <Input
+                        disabled={true}
                         type="number"
                         placeholder="1"
                         {...field}
