@@ -19,6 +19,7 @@ export class SaleRepository {
       customer: sale.customer._id,
       quantity: sale.quantity,
       soldAt: sale.soldAt,
+      isDeleted:false
     });
 
     doc.save();

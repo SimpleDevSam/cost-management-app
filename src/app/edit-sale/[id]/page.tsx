@@ -110,7 +110,6 @@ export default function EditSale({ params }: { params: Promise<{ id: string }>})
     })
     .then((data) => {
       console.log("Venda editada com sucesso:", data);
-      form.reset();
     })
     .catch((err) => {
       console.error("Erro ao editar venda:", err.message);

@@ -1,16 +1,16 @@
-import { SaleRepository } from "@/core/sale/repository";
-import { DeleteSale } from "@/core/sale/use-cases/deleteSale";
-import { NextRequest } from "next/server";
+import { CustomerRepository } from "@/core/customer/repository";
+import { GetCustomer } from "@/core/customer/use-cases/getCustomer";
+import {  NextRequest } from "next/server";
 
 
-const handler = new DeleteSale(new SaleRepository())
+const handler = new GetCustomer(new CustomerRepository())
 
 export async function GET(req: NextRequest, { params }: { params: { id: string }}) {
   try{
     const id = (await params).id;
 
     if(!id) {
-      throw new Error("ID da venda é requerido");
+      throw new Error("ID do cliente é requerido");
     }
 
     const sale = await handler.execute(id)

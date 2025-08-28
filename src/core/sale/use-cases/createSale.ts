@@ -19,22 +19,28 @@ export class CreateSale {
 
   async execute(createSaleDTO: CreateSaleDTO) {
     
-    const customerData = await this.customerRepo.findByName(createSaleDTO.customerName);
+    const customer = await this.customerRepo.findByName(createSaleDTO.customerName);
 
-    if (!customerData) { 
+    if (!customer) { 
       throw new Error('Customer not found');
     } 
 
-    const customer = await this.saleRepo.create({
-      customer:customerData,
+    const sale = await this.saleRepo.create({
+      customer:customer,
       amount:createSaleDTO.amount,
       soldAt:createSaleDTO.soldAt,
       quantity:createSaleDTO.quantity,
       deliveredDate:createSaleDTO.deliveredDate,
       pgDate:createSaleDTO.pgDate,
       isDeleted:false
-  });
+    });
 
-    return customer;
+    customer.totalSales += 1
+    customer.totalAmountSpent += createSaleDTO.amount
+    customer.lastPurchase = new Date()
+
+    await this.customerRepo.update(customer)
+
+    return sale;
   }
 }

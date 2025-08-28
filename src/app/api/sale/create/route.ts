@@ -1,11 +1,10 @@
 import { NextResponse } from "next/server";
-import { CreateCustomer } from "../../../../core/customer/use-cases/createCustomer";
 import { CustomerRepository } from "../../../../core/customer/repository";
 import z, { ZodError } from "zod";
 import { CreateSale, CreateSaleDTO } from "@/core/sale/use-cases/createSale";
 import { SaleRepository } from "@/core/sale/repository";
 
-const createCustomer = new CreateSale( new SaleRepository(), new CustomerRepository());
+const createSale = new CreateSale( new SaleRepository(), new CustomerRepository());
 
 const schema = z.object({
     amount: z.number().min(0, "Valor deve ser maior que zero"),
@@ -44,7 +43,9 @@ export async function POST(req: Request) {
       soldAt: soldDate,
       quantity
     }
-    const sale = await createCustomer.execute(createSaleDTO)
+
+    const sale = await createSale.execute(createSaleDTO)
+    
     return NextResponse.json(sale, { status: 201 });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 400 })

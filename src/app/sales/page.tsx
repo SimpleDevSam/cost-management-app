@@ -220,8 +220,9 @@ export default function SalesPage() {
     setCurrentPage(page)
   }
 
-  async function handleDelete(saleId: string) {
-      await fetch(`http://localhost:3000/api/sale/delete/${saleId}`)
+  async function handleDelete(saleId: string, customerId:string) {
+      await fetch(`http://localhost:3000/api/sale/delete/${saleId}/${customerId}`)
+      setSales(sales.filter(sale => sale._id !== saleId));
   }
 
   const TableHeaderContent = (
@@ -332,7 +333,7 @@ export default function SalesPage() {
                               <Edit className="h-4 w-4" />
                             </Button>
                           </Link>
-                          <Button onClick={() => handleDelete(sale._id)} variant="ghost" size="icon">
+                          <Button onClick={() => handleDelete(sale._id, sale.customer._id)} variant="ghost" size="icon">
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </TableCell>

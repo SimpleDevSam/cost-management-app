@@ -30,7 +30,7 @@ async function onSubmit(values: z.infer<typeof schema>) {
 
       if (!res.ok) {
         const error = await res.json();
-        console.error("❌ Failed:", error);
+        console.error(error);
         return;
       }
 

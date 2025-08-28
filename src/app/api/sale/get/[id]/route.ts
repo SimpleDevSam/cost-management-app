@@ -1,7 +1,6 @@
 import { SaleRepository } from "@/core/sale/repository";
 import { GetSale } from "@/core/sale/use-cases/getSale";
-import { NextApiRequest, NextApiResponse } from "next";
-import { NextResponse, NextRequest } from "next/server";
+import { NextRequest } from "next/server";
 
 
 const handler = new GetSale(new SaleRepository())

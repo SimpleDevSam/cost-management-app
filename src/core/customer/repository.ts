@@ -29,6 +29,13 @@ export class CustomerRepository {
     return doc
   }
 
+  async update(customer: Customer): Promise<Customer | null> {
+    await connectDatabase();
+    const doc = await CustomerModel.findByIdAndUpdate({_id :customer._id}, customer)
+    if (!doc) return null;
+    return doc
+  }
+
   async findByName(name: string): Promise<Customer | null> {
     await connectDatabase();
     const doc = await CustomerModel.findOne({ name }).exec();
