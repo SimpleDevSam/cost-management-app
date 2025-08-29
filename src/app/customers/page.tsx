@@ -174,7 +174,7 @@ export default function Customers() {
                               <Eye className="h-4 w-4" />
                             </Button>
                           </Link>
-                          <Link href={`/edit-sale/${customer._id}`}>
+                          <Link href={`/customer/edit/${customer._id}`}>
                             <Button variant="ghost" size="icon">
                               <Edit className="h-4 w-4" />
                             </Button>
