@@ -4,7 +4,7 @@ import { SaleRepository } from "@/core/sale/repository";
 import { CustomerRepository } from "@/core/customer/repository";
 import { EditSale, EditSaleDTO } from "@/core/sale/use-cases/editSale";
 
-const editCustomer = new EditSale( new SaleRepository(), new CustomerRepository());
+const editSale = new EditSale( new SaleRepository(), new CustomerRepository());
 
 const schema = z.object({
     soldAt: z.preprocess((arg) => {
@@ -46,7 +46,7 @@ export async function PATCH(req: Request , { params }: { params: { id: string }}
       deliveredDate,
       soldAt,
     }
-    const sale = await editCustomer.execute(editSaleDTO)
+    const sale = await editSale.execute(editSaleDTO)
     return NextResponse.json(sale, { status: 201 });
   } catch (err: any) {
     return NextResponse.json({ error: err.message }, { status: 400 })

@@ -61,8 +61,6 @@ export default function EditSale({ params }: { params: Promise<{ id: string }>})
       quantity:sale.quantity,
       soldAt:sale.soldAt,
     })
-
-
   }
   
   const fetchCustomers = async () => {

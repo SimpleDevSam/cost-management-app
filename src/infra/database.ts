@@ -1,8 +1,9 @@
 import mongoose, { ConnectOptions } from "mongoose";
+import { env } from "node:process";
 
-const MONGODB_URI = 'mongodb+srv://samuelufop121035:SamucaUfop123@costmanagementdb.agp8vac.mongodb.net/?retryWrites=true&w=majority&appName=CostManagementDb'
+const MONGODBURI =  process.env.MONGODB_URI ? process.env.MONGODB_URI : ''
 
-if (!MONGODB_URI) {
+if (MONGODBURI ==='') {
   throw new Error("Please define the MONGODB_URI environment variable inside .env.local");
 }
 
@@ -24,7 +25,7 @@ export async function connectDatabase() {
   if (cached.conn) return cached.conn;
 
   if (!cached.promise) {
-    cached.promise = mongoose.connect(MONGODB_URI, clientOptions).then((mongoose) => mongoose);
+    cached.promise = mongoose.connect(MONGODBURI, clientOptions).then((mongoose) => mongoose);
   }
   cached.conn = await cached.promise;
   return cached.conn;
