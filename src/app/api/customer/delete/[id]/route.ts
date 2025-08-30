@@ -4,7 +4,7 @@ import { SaleRepository } from "@/core/sale/repository";
 import { NextRequest } from "next/server";
 
 
-const handler = new DeleteCustomer(new CustomerRepository(), new SaleRepository)
+const handler = new DeleteCustomer(new CustomerRepository(), new SaleRepository())
 
 export async function DELETE(req: NextRequest, { params }: { params: { id: string }}) {
   try{
