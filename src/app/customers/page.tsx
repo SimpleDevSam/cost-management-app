@@ -11,6 +11,7 @@ import Link from "next/link";
 import React, { useEffect, useMemo } from "react";
 import { useState } from "react";
 import { ptBR, se } from "date-fns/locale"
+import { toast } from "sonner";
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Input } from "@/components/ui/input";
 import { Customer } from "@/core/customer/customerEntity";
@@ -53,7 +54,7 @@ export default function Customers() {
         setCustomers(customers)
 
       } catch (error){
-        alert('Erro ao buscar usuários')
+        toast.error('Erro ao buscar usuários')
       } finally {
         setIsLoading(false)
       }
@@ -119,11 +120,12 @@ export default function Customers() {
       const response = await fetch(`http://localhost:3000/api/customer/delete/${id}`, {method:'DELETE'})
 
       if (!response.ok) {
-        throw new Error('Erro ao deletar usuário')
+        throw new Error('❌ Não foi possível deletar cliente')
       }
       setCustomers(customers.filter(customer => customer._id !== id));
+      toast('✅ Cliente deletado com sucesso!')
     } catch (error:any){
-      alert(error.message)
+      toast(error.message)
     }
 
   }

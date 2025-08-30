@@ -1,11 +1,12 @@
 "use client";
-import { UserPlus } from "lucide-react";
+import { Terminal, UserPlus } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 export default function AddCustomer() {
 
@@ -35,10 +36,10 @@ async function onSubmit(values: z.infer<typeof schema>) {
       }
 
       const data = await res.json();
-      console.log("✅ Success:", data);
+      toast('✅ Cliente criado com sucesso!')
       form.reset();
     } catch (err) {
-      console.error("Unexpected error:", err);
+      toast('❌ Erro ao criar cliente!')
     }
 }
 

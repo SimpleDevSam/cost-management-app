@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { use, useEffect, useState } from "react";
+import { toast } from "sonner";
 import { Customer } from "@/core/customer/customerEntity";
 import router from "next/router";
 
@@ -59,14 +60,14 @@ async function onSubmit(values: z.infer<typeof schema>) {
 
       if (!res.ok) {
         const error = await res.json();
-        console.error(error);
+        toast(`❌ ${error.message}`)
         return;
       }
 
       const data = await res.json();
-      console.log("✅ Success:", data);
+      toast('✅ Cliente editado com sucesso!')
     } catch (err) {
-      console.error("Unexpected error:", err);
+      toast('❌ Erro ao editar cliente!')
     }
 }
 

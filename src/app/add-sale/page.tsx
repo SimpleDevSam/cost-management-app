@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
 
 export default function AddSell() {
 
@@ -45,7 +46,7 @@ export default function AddSell() {
     },
   })
 
-function onSubmit(values: z.infer<typeof schema>) {
+async function onSubmit(values: z.infer<typeof schema>) {
  
   const payload = {
     ...values,
@@ -54,26 +55,25 @@ function onSubmit(values: z.infer<typeof schema>) {
     deliveredDate: values.deliveredDate ? values.deliveredDate.toISOString() : null,
   };
 
-  fetch("/api/sale/create", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  })
-    .then(async (res) => {
+  try {
+      const res = await fetch("/api/sale/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
       if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Erro ao criar venda");
+        const error = await res.json();
+        console.error(error);
+        return;
       }
-      return res.json();
-    })
-    .then((data) => {
-      console.log("Venda criada com sucesso:", data);
+
+      const data = await res.json();
+      toast('✅ Venda criada com sucesso!')
       form.reset();
-    })
-    .catch((err) => {
-      console.error("Erro ao criar venda:", err.message);
-      alert(err.message);
-    });
+    } catch (err) {
+      toast('❌ Erro ao criar venda!')
+    }
 }
 
   return (

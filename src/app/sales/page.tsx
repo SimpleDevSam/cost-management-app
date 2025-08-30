@@ -54,6 +54,7 @@ import {
 import { date } from "zod"
 import Link from 'next/link'
 import { useRouter } from "next/navigation"
+import { toast } from "sonner";
 import { GetAllSalesDTO } from "../api/sale/getAll/route";
 
 // TypeScript Interface for Sale data
@@ -221,8 +222,20 @@ export default function SalesPage() {
   }
 
   async function handleDelete(saleId: string, customerId:string) {
-      await fetch(`http://localhost:3000/api/sale/delete/${saleId}/${customerId}`)
-      setSales(sales.filter(sale => sale._id !== saleId));
+      try {
+        const res = await fetch(`http://localhost:3000/api/sale/delete/${saleId}/${customerId}`)
+
+        if (!res.ok) {
+          const error = await res.json();
+          toast(`❌ ${error.message}`)
+          return;
+        }
+
+        setSales(sales.filter(sale => sale._id !== saleId));
+        toast('✅ Venda deletada com sucesso!')
+      } catch (err) {
+        toast('❌ Erro ao deletar venda!')
+      }
   }
 
   const TableHeaderContent = (

@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Pencil } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { use, useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
 import { Sale } from '@/core/sale/saleEntity';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
@@ -86,7 +87,7 @@ export default function EditSale({ params }: { params: Promise<{ id: string }>})
     }
   });
 
-  function onSubmit(values: z.infer<typeof schema>) {
+  async function onSubmit(values: z.infer<typeof schema>) {
       const payload = {
     ...values,
     soldDate: values.soldAt,
@@ -94,28 +95,24 @@ export default function EditSale({ params }: { params: Promise<{ id: string }>})
     deliveredDate: values.deliveredDate
   };
 
-  fetch(`/api/sale/edit/${resolvedParams.id}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  })
-    .then(async (res) => {
+  try {
+      const res = await fetch(`/api/sale/edit/${resolvedParams.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
       if (!res.ok) {
-        const err = await res.json();
-        throw new Error(err.error || "Erro ao editar venda");
+        const error = await res.json();
+        toast(`❌ ${error.message}`)
+        return;
       }
-      return res.json();
-    })
-    .then((data) => {
-      console.log("Venda editada com sucesso:", data);
-    })
-    .catch((err) => {
-      console.error("Erro ao editar venda:", err.message);
-      alert(err.message);
-    });
 
-
-    // router.push(`/view-sale/${resolvedParams.id}`);
+      const data = await res.json();
+      toast('✅ Venda editada com sucesso!')
+    } catch (err) {
+      toast('❌ Erro ao editar venda!')
+    }
   }
 
   return (
