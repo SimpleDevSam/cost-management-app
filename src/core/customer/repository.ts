@@ -22,6 +22,18 @@ export class CustomerRepository {
     return await CustomerModel.find().exec();
   }
 
+  async markAsDeleted(customerId: string): Promise<Customer> {
+      await connectDatabase();
+  
+      let doc = await CustomerModel.findOneAndUpdate<Customer>({_id:customerId}, {isDeleted:true}).exec();
+  
+      if (!doc){
+        throw new Error('Usuário não encontrado para ser deletado.')
+      }
+    
+      return doc;
+  }
+
   async findById(id: string): Promise<Customer | null> {
     await connectDatabase();
     const doc = await CustomerModel.findById(id).exec();

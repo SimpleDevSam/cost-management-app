@@ -14,6 +14,7 @@ import { ptBR, se } from "date-fns/locale"
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from "@/components/ui/pagination";
 import { Input } from "@/components/ui/input";
 import { Customer } from "@/core/customer/customerEntity";
+import { SaleModel } from "@/core/sale/mongooseModel";
 
 const formatCurrency = (value: number) => {
   return new Intl.NumberFormat("pt-BR", {
@@ -113,6 +114,20 @@ export default function Customers() {
     }
   }
 
+  const handleDelete = async (id:string) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/customer/delete/${id}`, {method:'DELETE'})
+
+      if (!response.ok) {
+        throw new Error('Erro ao deletar usuário')
+      }
+      setCustomers(customers.filter(customer => customer._id !== id));
+    } catch (error:any){
+      alert(error.message)
+    }
+
+  }
+
   const TableHeaderContent = (
     <>
       <TableHead onClick={() => handleSort("totalAmountSpent")} className="cursor-pointer">
@@ -179,8 +194,8 @@ export default function Customers() {
                               <Edit className="h-4 w-4" />
                             </Button>
                           </Link>
-                          <Button variant="ghost" size="icon">
-                            <Trash2 className="h-4 w-4" />
+                          <Button onClick={() => handleDelete(customer._id)}variant="ghost" size="icon">
+                            <Trash2  className="h-4 w-4" />
                           </Button>
                         </TableCell>
                       </TableRow>

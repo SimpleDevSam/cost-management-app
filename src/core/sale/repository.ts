@@ -32,6 +32,12 @@ export class SaleRepository {
     return docs;
   }
 
+  async findOneByCustomerId(customerId: string): Promise<Sale | null> {
+    await connectDatabase();
+    const docs = await SaleModel.findOne({ customer:customerId}).exec();
+    return docs;
+  }
+
   async editSale(sale: EditSaleDTO): Promise<Sale> {
     await connectDatabase();
     const doc = await SaleModel.findOneAndUpdate(
