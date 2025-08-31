@@ -6,7 +6,7 @@ import { NextRequest } from "next/server";
 
 const handler = new DeleteSale(new SaleRepository(), new CustomerRepository())
 
-export async function GET(req: NextRequest, { params }: { params: { id: string, customerId :string }}) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string, customerId:string }> }) {
   try{
     const {id, customerId} = (await params);
 

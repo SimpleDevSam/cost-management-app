@@ -7,6 +7,7 @@ const handler = new GetSale(new SaleRepository())
 
 export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try{
+    
     const id = (await params).id;
 
     if(!id) {

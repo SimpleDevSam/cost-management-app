@@ -23,9 +23,7 @@ const eslintConfig = [
 
   {
     rules: {
-      "@typescript-eslint/indent": ["error", "tab"],
-      "indent": "off",
-      "indent": ["error", "tab", {
+      "@typescript-eslint/indent": ["error", "tab", {
         ignoredNodes: [
           "JSXElement *", 
           "JSXElement",

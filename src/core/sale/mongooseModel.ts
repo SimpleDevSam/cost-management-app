@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { CustomerModel } from "../customer/mongooseModel";
-import { boolean } from "zod";
+
 
 export interface SaleDocument extends Document {
   customer: mongoose.Types.ObjectId;
@@ -19,7 +19,7 @@ const SaleSchema = new Schema<SaleDocument>({
   soldAt: { type: Date, default: null },
   deliveredDate: { type: Date, default: null },
   quantity: { type: Number, required: true },
-  isDeleted: { type: boolean},
+  isDeleted: { type: Boolean},
  }, { timestamps: true, strict: false });
 
 export const SaleModel =

@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 import z, { ZodError } from "zod";
 import { SaleRepository } from "@/core/sale/repository";
 import { CustomerRepository } from "@/core/customer/repository";
@@ -8,7 +8,6 @@ const editSale = new EditSale( new SaleRepository(), new CustomerRepository());
 
 const schema = z.object({
     soldAt: z.preprocess((arg) => {
-      if (typeof arg ==="string" && arg === '') return undefined
       if (typeof arg === "string" || arg instanceof Date) return new Date(arg);
     }, z.date({ error: "Data deve ser uma data válida" })),
     customerName: z.string({
@@ -26,9 +25,9 @@ const schema = z.object({
     }, z.union([z.date({ error: "Data deve ser uma data válida" }), z.undefined(), z.null()]))
   });
 
-export async function PATCH(req: Request , { params }: { params: { id: string }}) {
+export async function PATCH(req: NextRequest , { params }: { params: Promise<{ id: string }> }) {
   const body = await req.json();
-  const id = (await params).id;
+  const { id } = await params;
   const { soldAt, customerName, pgDate, deliveredDate} = body;
 
   try {

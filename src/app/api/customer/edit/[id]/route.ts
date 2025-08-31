@@ -11,7 +11,7 @@ const schema = z.object({
     })
   });
 
-export async function PATCH(req: Request , { params }: { params: { id: string }}) {
+export async function PATCH(req: Request , { params }: { params: Promise<{ id: string }> }) {
   const body = await req.json();
   const id = (await params).id;
 
