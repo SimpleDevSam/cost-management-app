@@ -65,7 +65,7 @@ export default function EditSale({ params }: { params: Promise<{ id: string }>})
   }
   
   const fetchCustomers = async () => {
-    const data = await fetch('http://localhost:3000/api/customer/getAll')
+    const data = await fetch('/api/customer/getAll')
     const json = await data.json()
     setCustomers(json)
   }

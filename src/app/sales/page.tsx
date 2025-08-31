@@ -103,7 +103,7 @@ export default function SalesPage() {
   const itemsPerPage = 5
 
     useMemo(async () => {
-      const data = await  fetch('http://localhost:3000/api/sale/getAll')
+      const data = await  fetch('/api/sale/getAll')
       const json = await data.json()
       setSales(json)
       setIsLoading(false)
@@ -223,7 +223,7 @@ export default function SalesPage() {
 
   async function handleDelete(saleId: string, customerId:string) {
       try {
-        const res = await fetch(`http://localhost:3000/api/sale/delete/${saleId}/${customerId}`)
+        const res = await fetch(`/api/sale/delete/${saleId}/${customerId}`)
 
         if (!res.ok) {
           const error = await res.json();

@@ -49,7 +49,7 @@ export default function Customers() {
     const fetchCustomers = async () => {
       try{
         setIsLoading(true)
-        const data = await fetch('http://localhost:3000/api/customer/getAll')
+        const data = await fetch('/api/customer/getAll')
         const customers = await data.json()
         setCustomers(customers)
 
@@ -117,7 +117,7 @@ export default function Customers() {
 
   const handleDelete = async (id:string) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/customer/delete/${id}`, {method:'DELETE'})
+      const response = await fetch(`/api/customer/delete/${id}`, {method:'DELETE'})
 
       if (!response.ok) {
         throw new Error('❌ Não foi possível deletar cliente')

@@ -15,7 +15,7 @@ export default function AddSell() {
   const [customers, setCustomers] =  useState([])
 
   useMemo(async () => {
-    const data = await fetch('http://localhost:3000/api/customer/getAll')
+    const data = await fetch('/api/customer/getAll')
     const json = await data.json()
     setCustomers(json)
   }, [])
