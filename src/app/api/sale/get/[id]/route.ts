@@ -5,7 +5,7 @@ import { NextRequest } from "next/server";
 
 const handler = new GetSale(new SaleRepository())
 
-export async function GET(req: NextRequest, { params }: { params: { id: string }}) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try{
     const id = (await params).id;
 
