@@ -34,7 +34,7 @@ export class SaleRepository {
 
   async findOneByCustomerId(customerId: string): Promise<Sale | null> {
     await connectDatabase();
-    const docs = await SaleModel.findOne({ customer:customerId}).exec();
+    const docs = await SaleModel.findOne({customer:customerId, isDeleted:false}).exec();
     return docs;
   }
 
