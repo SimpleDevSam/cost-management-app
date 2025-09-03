@@ -382,7 +382,9 @@ export default function SalesPage() {
                                 <Edit className="mr-2 h-4 w-4" /> Editar
                               </Link>
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="text-red-500"> <Trash2 className="mr-2 h-4 w-4" /> Excluir </DropdownMenuItem>
+                            <DropdownMenuItem className="text-red-500"> 
+                              <Trash2 onClick={() => handleDelete(sale._id, sale.customer._id)} className="mr-2 h-4 w-4" /> Excluir
+                            </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </div>

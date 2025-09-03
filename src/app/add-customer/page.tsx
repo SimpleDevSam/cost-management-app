@@ -63,7 +63,7 @@ async function onSubmit(values: z.infer<typeof schema>) {
                         <Input
                         type="text"
                         placeholder="Nome de Usuário"
-                        value={field.value}
+                        value={field.value.trim()}
                         onChange={field.onChange}
                         />
                     </FormControl>

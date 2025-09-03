@@ -20,7 +20,7 @@ export async function POST(req: Request) {
   }
 
   try {
-    const createCustomerDTO = { name:name };
+    const createCustomerDTO = { name:name, isDeleted:false };
     const sale = await createCustomer.execute(createCustomerDTO)
     return NextResponse.json(sale, { status: 201 });
   } catch (err: any) {
