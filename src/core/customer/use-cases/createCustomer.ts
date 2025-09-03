@@ -10,10 +10,8 @@ export class CreateCustomer {
   ) {}
 
   async execute(createCustomerDTO: CreateCustomerDTO) {
-    console.log("Creating customer with name:", createCustomerDTO.name);
 
     const hasCustomer = await this.customerRepo.findByName(createCustomerDTO.name);
-    console.log("After hasCustomer", createCustomerDTO.name);
 
     if (hasCustomer) {
       throw new Error("Customer already exists");
