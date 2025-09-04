@@ -1,6 +1,5 @@
 'use client'
 
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -14,7 +13,7 @@ import { Pagination, PaginationContent, PaginationItem, PaginationLink, Paginati
 import { Input } from "@/components/ui/input";
 import { Customer } from "@/core/customer/customerEntity";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { formatCurrency, formatDate, formatQuantity } from "../utils/formattingUtils";
+import { formatCurrency, formatDate } from "../utils/formattingUtils";
 
 
 type SortKey = keyof Customer | null
@@ -239,7 +238,7 @@ export default function Customers() {
                     </div>
                     <div>
                       <p className="font-medium">Total Vendas</p>
-                      <p>{formatQuantity(customer.totalSales)}</p>
+                      <p>{customer.totalSales}</p>
                     </div>
                     <div>
                       <p className="font-medium">Última Compra</p>
