@@ -7,8 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
+import { useState } from "react";
 
 export default function AddCustomer() {
+
+const [isLoading, setIsLoading] =  useState(false)
 
 const schema = z.object({
   userName: z.string().min(1, "Nome de usuário é obrigatório"),
@@ -23,6 +26,7 @@ const form = useForm<z.infer<typeof schema>>({
 
 async function onSubmit(values: z.infer<typeof schema>) {
     try {
+      setIsLoading(true)
       const res = await fetch("/api/customer/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -40,6 +44,8 @@ async function onSubmit(values: z.infer<typeof schema>) {
       form.reset();
     } catch (err) {
       toast('❌ Erro ao criar cliente!')
+    } finally {
+      setIsLoading(false)
     }
 }
 
@@ -71,7 +77,7 @@ async function onSubmit(values: z.infer<typeof schema>) {
                     </FormItem>
                 )}
                 />
-        <Button type="submit">Adicionar Cliente</Button>
+        <Button disabled={isLoading} type="submit">{isLoading ? 'Adicionando..' : 'Adicionar Cliente'}</Button>
       </form>
     </Form>
           </div>

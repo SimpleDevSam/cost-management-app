@@ -8,7 +8,7 @@ export function BottomNavigation() {
     const router = useRouter();
   return (
     <div className="fixed bottom-0 left-0 right-0 border-t bg-background p-2">
-      <Tabs defaultValue="sales" className="w-full">
+      <Tabs defaultValue="home" className="w-full">
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="home" onClick={() => router.push('/')} className="flex flex-row items-center gap-1 py-2">
             <HomeIcon className="h-5 w-5" />

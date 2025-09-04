@@ -1,8 +1,7 @@
 "use client";
 
 import * as React from "react"
-import { useState, useMemo } from "react"
-import { format } from "date-fns"
+import { useState, useMemo, useEffect } from "react"
 import { ptBR } from "date-fns/locale"
 import {
   ChevronDown,
@@ -56,8 +55,8 @@ import Link from 'next/link'
 import { useRouter } from "next/navigation"
 import { toast } from "sonner";
 import { GetAllSalesDTO } from "../api/sale/getAll/route";
+import { formatCurrency, formatDate, formatQuantity } from "../utils/formattingUtils";
 
-// TypeScript Interface for Sale data
 interface Sale {
   id: string
   amount: number
@@ -68,22 +67,6 @@ interface Sale {
   quantity: number
 }
 
-// Utility Functions
-const formatCurrency = (value: number) => {
-  return new Intl.NumberFormat("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  }).format(value)
-}
-
-const formatDate = (date: Date | null) => {
-  if (!date) return "-"
-  return format(date, "dd/MM/yyyy", { locale: ptBR })
-}
-
-const formatQuantity = (quantity: number) => {
-  return new Intl.NumberFormat("pt-BR").format(quantity) + "g"
-}
 
 type SortKey = 'customerId.name' | 'soldAt' | 'amount' | 'quantity' | 'pgDate' | 'deliveredDate' | null;
 type SortDirection = "asc" | "desc"
@@ -91,6 +74,7 @@ export interface DateRange { from?: Date, to?: Date }
 
 export default function SalesPage() {
   const [isLoading, setIsLoading] = useState(true)
+  const [isSubmiting, setIsSubmiting] = useState(false)
   const [sales, setSales] = useState<GetAllSalesDTO[]>([])
   const [searchTerm, setSearchTerm] = useState("")
   const [dateRange, setDateRange] = useState<DateRange>({ from: undefined, to: undefined })
@@ -102,11 +86,16 @@ export default function SalesPage() {
   const router = useRouter();
   const itemsPerPage = 5
 
-    useMemo(async () => {
-      const data = await  fetch('/api/sale/getAll')
-      const json = await data.json()
-      setSales(json)
-      setIsLoading(false)
+    useEffect( () => {
+      const getSales = async() => {
+        const data = await  fetch('/api/sale/getAll')
+        const json = await data.json()
+        setSales(json)
+        setIsLoading(false)
+      }
+
+      getSales()
+
   }, [])
 
   const clearFilters = () => {
@@ -223,6 +212,7 @@ export default function SalesPage() {
 
   async function handleDelete(saleId: string, customerId:string) {
       try {
+        setIsSubmiting(true)
         const res = await fetch(`/api/sale/delete/${saleId}/${customerId}`)
 
         if (!res.ok) {
@@ -235,6 +225,8 @@ export default function SalesPage() {
         toast('✅ Venda deletada com sucesso!')
       } catch (err) {
         toast('❌ Erro ao deletar venda!')
+      } finally {
+        setIsSubmiting(false)
       }
   }
 
@@ -337,16 +329,16 @@ export default function SalesPage() {
                         <TableCell className="text-right">{formatQuantity(sale.quantity)}</TableCell>
                         <TableCell className="text-center">
                           <Link href={`/view-sale/${sale._id}`}>
-                            <Button variant="ghost" size="icon">
+                            <Button disabled={isSubmiting} variant="ghost" size="icon">
                               <Eye className="h-4 w-4" />
                             </Button>
                           </Link>
-                          <Link href={`/edit-sale/${sale._id}`}>
-                            <Button variant="ghost" size="icon">
+                          <Link  href={`/edit-sale/${sale._id}`}>
+                            <Button disabled={isSubmiting} variant="ghost" size="icon">
                               <Edit className="h-4 w-4" />
                             </Button>
                           </Link>
-                          <Button onClick={() => handleDelete(sale._id, sale.customer._id)} variant="ghost" size="icon">
+                          <Button disabled={isSubmiting} onClick={() => handleDelete(sale._id, sale.customer._id)} variant="ghost" size="icon">
                             <Trash2 className="h-4 w-4" />
                           </Button>
                         </TableCell>
@@ -382,8 +374,8 @@ export default function SalesPage() {
                                 <Edit className="mr-2 h-4 w-4" /> Editar
                               </Link>
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="text-red-500"> 
-                              <Trash2 onClick={() => handleDelete(sale._id, sale.customer._id)} className="mr-2 h-4 w-4" /> Excluir
+                            <DropdownMenuItem disabled={isSubmiting} className="text-red-500"> 
+                              <Trash2  onClick={() => handleDelete(sale._id, sale.customer._id)} className="mr-2 h-4 w-4" /> Excluir
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>

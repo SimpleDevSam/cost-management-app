@@ -9,15 +9,24 @@ import { useForm } from "react-hook-form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
+import { set } from "mongoose";
 
 export default function AddSell() {
-
+  const [isLoading, setIsLoading] =  useState(false)
+  const [isSubmiting, setIsSubmiting] =  useState(false)
   const [customers, setCustomers] =  useState([])
 
   useMemo(async () => {
-    const data = await fetch('/api/customer/getAll')
-    const json = await data.json()
-    setCustomers(json)
+    try{
+      setIsLoading(true)
+      const data = await fetch('/api/customer/getAll')
+      const json = await data.json()
+      setCustomers(json)
+    } catch(err) {
+      toast('❌ Erro ao carregar clientes!')
+    }
+
+    setIsLoading(false)
   }, [])
 
   const schema = z.object({
@@ -56,6 +65,7 @@ async function onSubmit(values: z.infer<typeof schema>) {
   };
 
   try {
+      setIsSubmiting(true)
       const res = await fetch("/api/sale/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -68,11 +78,14 @@ async function onSubmit(values: z.infer<typeof schema>) {
         return;
       }
 
-      const data = await res.json();
       toast('✅ Venda criada com sucesso!')
       form.reset();
+
     } catch (err) {
       toast('❌ Erro ao criar venda!')
+
+    } finally {
+      setIsSubmiting(false)
     }
 }
 
@@ -201,7 +214,7 @@ async function onSubmit(values: z.infer<typeof schema>) {
               )}
             />
 
-        <Button type="submit">Adicionar Venda</Button>
+        <Button disabled={isSubmiting} type="submit">{isSubmiting ? 'Adicionando..' : 'Adicionar Venda'}</Button>
       </form>
     </Form>
           </div>
