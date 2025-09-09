@@ -19,7 +19,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <ClerkProvider localization={ptBR} proxyUrl="/clerk">
+    <ClerkProvider localization={ptBR}>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <Header/>
