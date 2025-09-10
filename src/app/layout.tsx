@@ -6,7 +6,6 @@ import { Header } from "@/components/header";
 import { BottomNavigation } from "@/components/bottomNavigation";
 import { Toaster } from "sonner";
 import { ptBR } from '@clerk/localizations'
-import ClientClerkProvider from "@/components/cleintClerkProvider";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -20,7 +19,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <ClientClerkProvider>
+    <ClerkProvider localization={ptBR}>
       <html lang="en">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <Header/>
@@ -32,6 +31,6 @@ export default function RootLayout({
 
         </body>
       </html>
-    </ClientClerkProvider>
+    </ClerkProvider>
   );
 }
