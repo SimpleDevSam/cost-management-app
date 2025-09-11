@@ -2,9 +2,9 @@
 import { Card, CardDescription } from "@/components/ui/card";
 import { useUser } from "@clerk/nextjs";
 
-export default async function Home() {
+export default function Home() {
 
-  const {user} = await useUser()
+  const {user} = useUser()
 
   return (
     <div className="font-sans flex flex-row items-center items-center justify-center min-h-screen py-8 pb-20 gap-16 sm:p-20">
