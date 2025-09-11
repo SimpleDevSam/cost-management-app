@@ -18,7 +18,7 @@ export class DeleteCustomer {
 
     const customer = await this.customerRepo.markAsDeleted(customerId, userId);
 
-    await this.customerRepo.update(customer, userId)
+    await this.customerRepo.update(customer)
     
     return customer
   }
