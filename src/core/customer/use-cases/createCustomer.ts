@@ -2,6 +2,7 @@ import { CustomerRepository } from "../repository";
 
 export interface CreateCustomerDTO {
   name: string;
+  userId:string;
 }
 
 export class CreateCustomer {
@@ -11,10 +12,10 @@ export class CreateCustomer {
 
   async execute(createCustomerDTO: CreateCustomerDTO) {
 
-    const hasCustomer = await this.customerRepo.findByName(createCustomerDTO.name);
+    const hasCustomer = await this.customerRepo.findByName(createCustomerDTO);
 
     if (hasCustomer) {
-      throw new Error("Customer already exists");
+      throw new Error("Cliente já existe");
     }
 
     const customer = await this.customerRepo.create(createCustomerDTO);

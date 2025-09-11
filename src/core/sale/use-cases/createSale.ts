@@ -1,14 +1,16 @@
 import { CustomerRepository } from "@/core/customer/repository";
 import { SaleRepository } from "../repository";
 import { Sale } from "../saleEntity";
+import { requireUserId } from "@/lib/requireUser";
 
 export interface CreateSaleDTO {
-  customerName: string;
+  name: string;
   amount: number;
   pgDate: Date | null
   deliveredDate: Date | null
   soldAt: Date
   quantity: number
+  userId:string
 }
 
 export class CreateSale {
@@ -18,8 +20,9 @@ export class CreateSale {
   ) {}
 
   async execute(createSaleDTO: CreateSaleDTO) {
-    
-    const customer = await this.customerRepo.findByName(createSaleDTO.customerName);
+    const userId = await requireUserId();
+
+    const customer = await this.customerRepo.findByName(createSaleDTO);
 
     if (!customer) { 
       throw new Error('Customer not found');
@@ -32,7 +35,8 @@ export class CreateSale {
       quantity:createSaleDTO.quantity,
       deliveredDate:createSaleDTO.deliveredDate,
       pgDate:createSaleDTO.pgDate,
-      isDeleted:false
+      isDeleted:false,
+      userId
     });
 
     customer.totalSales += 1

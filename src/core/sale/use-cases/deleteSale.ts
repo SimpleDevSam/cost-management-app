@@ -8,7 +8,7 @@ export class DeleteSale {
     private customerRepo:CustomerRepository
   ) {}
 
-  async execute(saleId: string, customerId:string) : Promise<Sale> {
+  async execute(saleId: string, customerId:string, userId:string) : Promise<Sale> {
 
     const sale = await this.salesRepo.markAsDeleted(saleId);
 
@@ -16,7 +16,7 @@ export class DeleteSale {
       throw new Error("Venda não encontrada");
     }
 
-    const customer = await this.customerRepo.findById(customerId)
+    const customer = await this.customerRepo.findById(customerId, userId)
 
     if (!customer){
       throw new Error("Usuário não encontrado");

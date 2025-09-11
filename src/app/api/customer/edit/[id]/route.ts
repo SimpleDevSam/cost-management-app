@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import z, { ZodError } from "zod";
 import { CustomerRepository } from "@/core/customer/repository";
 import { EditCustomer, EditCustomerDTO } from "@/core/customer/use-cases/editCustomer";
+import { requireUserId } from "@/lib/requireUser";
 
 const editCustomer = new EditCustomer( new CustomerRepository());
 
@@ -16,8 +17,10 @@ export async function PATCH(req: Request , { params }: { params: Promise<{ id: s
   const id = (await params).id;
 
   if (!id) {
-    throw new Error('Usuário não encontrado')
+    throw new Error('Cliente não encontrado')
   }
+
+  const userId = await requireUserId();
 
   const { name } = body;
 
@@ -31,7 +34,8 @@ export async function PATCH(req: Request , { params }: { params: Promise<{ id: s
   try {
     const editSaleDTO : EditCustomerDTO = {
       _id:id,
-      name
+      name,
+      userId
     }
     
     const sale = await editCustomer.execute(editSaleDTO)

@@ -1,6 +1,7 @@
 import { CustomerRepository } from "@/core/customer/repository";
 import { SaleRepository } from "../repository";
 import { Customer } from "@/core/customer/customerEntity";
+import { CreateCustomerDTO } from "@/core/customer/use-cases/createCustomer";
 
 export interface EditSaleDTO {
     readonly _id?: string;
@@ -10,6 +11,7 @@ export interface EditSaleDTO {
     readonly pgDate?: Date | null;
     readonly deliveredDate?: Date | null;
     readonly isDeleted?: boolean;
+    readonly userId:string
   }
 
 
@@ -20,14 +22,14 @@ export class EditSale {
   ) {}
 
   async execute(editSaleDTO: EditSaleDTO) {
-
-    console.log(JSON.stringify(editSaleDTO))
     
     if (editSaleDTO.customerName === null || editSaleDTO.customerName === undefined){
       throw new Error('Usuário não encontrado ao realizar edição.')
     }
 
-    const customerData = await this.customerRepo.findByName(editSaleDTO.customerName);
+    var customerDTO:CreateCustomerDTO = {name: editSaleDTO.customerName, userId:editSaleDTO.userId}
+
+    const customerData = await this.customerRepo.findByName(customerDTO);
 
     if (!customerData) { 
       throw new Error('Customer not found');
@@ -40,6 +42,7 @@ export class EditSale {
         customer:customerData,
         deliveredDate:editSaleDTO.deliveredDate,
         pgDate:editSaleDTO.pgDate,
+        userId:editSaleDTO.userId
         }     
 
     )

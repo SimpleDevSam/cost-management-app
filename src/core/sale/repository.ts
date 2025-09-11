@@ -19,7 +19,8 @@ export class SaleRepository {
       customer: sale.customer._id,
       quantity: sale.quantity,
       soldAt: sale.soldAt,
-      isDeleted:false
+      isDeleted:false,
+      userId:sale.userId
     });
 
     doc.save();
@@ -32,16 +33,16 @@ export class SaleRepository {
     return docs;
   }
 
-  async findOneByCustomerId(customerId: string): Promise<Sale | null> {
+  async findOneByCustomerIdAndUserId(customerId: string, userId:string): Promise<Sale | null> {
     await connectDatabase();
-    const docs = await SaleModel.findOne({customer:customerId, isDeleted:false}).exec();
+    const docs = await SaleModel.findOne({customerId, isDeleted:false, userId}).exec();
     return docs;
   }
 
   async editSale(sale: EditSaleDTO): Promise<Sale> {
     await connectDatabase();
     const doc = await SaleModel.findOneAndUpdate(
-      {_id:sale._id}, sale).exec();
+      {_id:sale._id, userId:sale.userId}, sale).exec();
     return doc;
   }
 
@@ -57,16 +58,16 @@ export class SaleRepository {
     return doc;
   }
 
-  async getSaleById(saleId: string): Promise<Sale | null> {
+  async getSaleById(saleId: string, userId:string): Promise<Sale | null> {
     await connectDatabase();
-    const doc  = await SaleModel.findOne({ _id : saleId }).populate('customer').exec()
+    const doc  = await SaleModel.findOne({ _id : saleId, userId:userId }).populate('customer').exec()
 
     return doc
   }
 
-  async getAll(): Promise<GetAllSalesDTO[]> {
+  async getAll(userId:string): Promise<GetAllSalesDTO[]> {
       await connectDatabase();
-      return await SaleModel.find({isDeleted:false}).populate('customer').exec();
+      return await SaleModel.find({isDeleted:false, userId}).populate('customer').exec();
     }
 
 }

@@ -3,6 +3,7 @@ import { CustomerRepository } from "../../../../core/customer/repository";
 import z, { ZodError } from "zod";
 import { CreateSale, CreateSaleDTO } from "@/core/sale/use-cases/createSale";
 import { SaleRepository } from "@/core/sale/repository";
+import { requireUserId } from "@/lib/requireUser";
 
 const createSale = new CreateSale( new SaleRepository(), new CustomerRepository());
 
@@ -35,13 +36,17 @@ export async function POST(req: Request) {
   }
 
   try {
+
+    const userId = await requireUserId();
+    
     const createSaleDTO : CreateSaleDTO = {
       amount,
-      customerName: customer,
+      name: customer,
       pgDate,
       deliveredDate,
       soldAt: soldDate,
-      quantity
+      quantity,
+      userId
     }
 
     const sale = await createSale.execute(createSaleDTO)

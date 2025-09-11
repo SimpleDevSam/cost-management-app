@@ -10,8 +10,8 @@ export class GetAllCustomer {
     private customerRepo: CustomerRepository,
   ) {}
 
-  async execute() : Promise<Customer[]> {
-    const customers = await this.customerRepo.getAll();
+  async execute(userId:string) : Promise<Customer[]> {
+    const customers = await this.customerRepo.getAll(userId);
     return customers;
   }
 }

@@ -6,8 +6,8 @@ export class GetAllSalesWithCustomerName {
     private salesRepo: SaleRepository,
   ) {}
 
-  async execute() : Promise<GetAllSalesDTO[]> {
-    const customers = await this.salesRepo.getAll();
+  async execute(userId:string) : Promise<GetAllSalesDTO[]> {
+    const customers = await this.salesRepo.getAll(userId);
     return customers;
   }
 }

@@ -3,6 +3,7 @@ import { CustomerRepository } from "@/core/customer/repository";
 export interface EditCustomerDTO {
     readonly _id:string;
     readonly name: string;
+    readonly userId:string;
   }
 
 export class EditCustomer {
@@ -16,7 +17,7 @@ export class EditCustomer {
       throw new Error('Usuário não encontrado ao realizar edição.')
     }
 
-    const customer = await this.customerRepo.findById(editCustomerDTO._id)
+    const customer = await this.customerRepo.findById(editCustomerDTO._id, editCustomerDTO.userId)
 
     if (!customer){
       throw new Error('Usuário não encontrado')

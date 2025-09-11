@@ -20,7 +20,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <ClerkProvider localization={ptBR}>
-      <html lang="en">
+      <html lang="pt">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <Header/>
           {children}

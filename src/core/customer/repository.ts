@@ -17,15 +17,15 @@ export class CustomerRepository {
     return doc;
   }
 
-  async getAll(): Promise<Customer[]> {
+  async getAll(userId:string): Promise<Customer[]> {
     await connectDatabase();
-    return await CustomerModel.find().exec();
+    return await CustomerModel.find({userId}).exec();
   }
 
-  async markAsDeleted(customerId: string): Promise<Customer> {
+  async markAsDeleted(customerId: string, userId:string): Promise<Customer> {
       await connectDatabase();
   
-      let doc = await CustomerModel.findOneAndUpdate<Customer>({_id:customerId}, {isDeleted:true}).exec();
+      let doc = await CustomerModel.findOneAndUpdate<Customer>({_id:customerId, userId}, {isDeleted:true}, ).exec();
   
       if (!doc){
         throw new Error('Usuário não encontrado para ser deletado.')
@@ -34,23 +34,23 @@ export class CustomerRepository {
       return doc;
   }
 
-  async findById(id: string): Promise<Customer | null> {
+  async findById(id: string, userId:string): Promise<Customer | null> {
     await connectDatabase();
-    const doc = await CustomerModel.findById(id).exec();
+    const doc = await CustomerModel.findOne({_id:id, userId}).exec();
     if (!doc) return null;
     return doc
   }
 
   async update(customer: Customer): Promise<Customer | null> {
     await connectDatabase();
-    const doc = await CustomerModel.findByIdAndUpdate({_id :customer._id}, customer)
+    const doc = await CustomerModel.findByIdAndUpdate({_id :customer._id, userId:customer.userId}, customer)
     if (!doc) return null;
     return doc
   }
 
-  async findByName(name: string): Promise<Customer | null> {
+  async findByName(customer: CreateCustomerDTO): Promise<Customer | null> {
     await connectDatabase();
-    const doc = await CustomerModel.findOne({ name }).exec();
+    const doc = await CustomerModel.findOne({ name:customer.name, userId:customer.userId }).exec();
     if (!doc) return null;
     return doc;
   }

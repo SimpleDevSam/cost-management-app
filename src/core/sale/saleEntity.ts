@@ -2,6 +2,7 @@ import { Customer } from "../customer/customerEntity";
 
 export interface Sale {
   readonly _id?: string;
+  readonly userId?:string;
   readonly customer: Customer;
   readonly amount: number;
   readonly quantity: number;

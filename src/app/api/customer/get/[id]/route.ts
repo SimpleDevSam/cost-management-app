@@ -1,5 +1,6 @@
 import { CustomerRepository } from "@/core/customer/repository";
 import { GetCustomer } from "@/core/customer/use-cases/getCustomer";
+import { requireUserId } from "@/lib/requireUser";
 import {  NextRequest } from "next/server";
 
 
@@ -13,7 +14,9 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
       throw new Error("ID do cliente é requerido");
     }
 
-    const sale = await handler.execute(id)
+    const userId = await requireUserId();
+
+    const sale = await handler.execute(id, userId)
 
     return  new Response(JSON.stringify(sale), {
     status: 200,

@@ -4,6 +4,7 @@ import { CustomerModel } from "../customer/mongooseModel";
 
 export interface SaleDocument extends Document {
   customer: mongoose.Types.ObjectId;
+  userId:string;
   amount: number;
   pgDate: Date;
   soldAt: Date;
@@ -13,6 +14,7 @@ export interface SaleDocument extends Document {
 }
 
 const SaleSchema = new Schema<SaleDocument>({
+  userId: { type: String, required: true, index: true },
   customer: { type: Schema.Types.ObjectId, ref: 'Customer', required: true },
   amount: { type: Number, required: true },
   pgDate: { type: Date, default: null },

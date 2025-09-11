@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { CreateCustomer } from "../../../../core/customer/use-cases/createCustomer";
 import { CustomerRepository } from "../../../../core/customer/repository";
 import z, { ZodError } from "zod";
+import { requireUserId } from "@/lib/requireUser";
 
 const createCustomer = new CreateCustomer(new CustomerRepository())
 
@@ -20,7 +21,8 @@ export async function POST(req: Request) {
   }
 
   try {
-    const createCustomerDTO = { name:name, isDeleted:false };
+    const userId = await requireUserId();
+    const createCustomerDTO = { name:name, isDeleted:false, userId:userId };
     const sale = await createCustomer.execute(createCustomerDTO)
     return NextResponse.json(sale, { status: 201 });
   } catch (err: any) {

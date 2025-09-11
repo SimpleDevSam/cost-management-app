@@ -3,6 +3,7 @@ import z, { ZodError } from "zod";
 import { SaleRepository } from "@/core/sale/repository";
 import { CustomerRepository } from "@/core/customer/repository";
 import { EditSale, EditSaleDTO } from "@/core/sale/use-cases/editSale";
+import { requireUserId } from "@/lib/requireUser";
 
 const editSale = new EditSale( new SaleRepository(), new CustomerRepository());
 
@@ -37,13 +38,17 @@ export async function PATCH(req: NextRequest , { params }: { params: Promise<{ i
     return NextResponse.json({ error: error }, { status: 400 } );
   }
 
+  const userId = await requireUserId();
+
   try {
+    
     const editSaleDTO : EditSaleDTO = {
       _id:id,
       customerName,
       pgDate,
       deliveredDate,
       soldAt,
+      userId
     }
     const sale = await editSale.execute(editSaleDTO)
     return NextResponse.json(sale, { status: 201 });

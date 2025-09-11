@@ -6,9 +6,9 @@ export class GetSale {
     private salesRepo: SaleRepository,
   ) {}
 
-  async execute(saleId: string) : Promise<Sale> {
+  async execute(saleId: string, userId:string) : Promise<Sale> {
 
-    const sale = await this.salesRepo.getSaleById(saleId);
+    const sale = await this.salesRepo.getSaleById(saleId, userId);
 
     if(!sale) {
       throw new Error("Sale not found");

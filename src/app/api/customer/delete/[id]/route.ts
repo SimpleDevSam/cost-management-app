@@ -1,6 +1,7 @@
 import { CustomerRepository } from "@/core/customer/repository";
 import { DeleteCustomer } from "@/core/customer/use-cases/deleteCustomer";
 import { SaleRepository } from "@/core/sale/repository";
+import { requireUserId } from "@/lib/requireUser";
 import { NextRequest } from "next/server";
 
 const handler = new DeleteCustomer(new CustomerRepository(), new SaleRepository());
@@ -16,7 +17,9 @@ export async function DELETE(
       throw new Error("ID do usuário é requerido");
     }
 
-    const customer = await handler.execute(id);
+    const userId = await requireUserId();
+
+    const customer = await handler.execute(id, userId);
 
     return new Response(JSON.stringify(customer), {
       status: 200,
